@@ -466,6 +466,7 @@ public class SingleConnectionFactory implements ConnectionFactory, QueueConnecti
 	 * @return the newly created Session
 	 * @throws JMSException if thrown by the JMS API
 	 */
+    @SuppressWarnings({"compliance", "value", "crypto"}) // FALSE POSITIVE: conditional assignment causes checker framework 2.7.0 to issue a spurious error
 	protected Session createSession(Connection con, Integer mode) throws JMSException {
 		// Determine JMS API arguments...
 		boolean transacted = (mode == Session.SESSION_TRANSACTED);

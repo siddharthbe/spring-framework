@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.checkerframework.common.value.qual.StringVal;
+
 /**
  * Miscellaneous methods for calculating digests.
  *
@@ -107,7 +109,7 @@ public abstract class DigestUtils {
 	 * Create a new {@link MessageDigest} with the given algorithm.
 	 * Necessary because {@code MessageDigest} is not thread-safe.
 	 */
-	private static MessageDigest getDigest(String algorithm) {
+        private static MessageDigest getDigest(@StringVal("MD5") String algorithm) {
 		try {
 			return MessageDigest.getInstance(algorithm);
 		}
@@ -116,11 +118,11 @@ public abstract class DigestUtils {
 		}
 	}
 
-	private static byte[] digest(String algorithm, byte[] bytes) {
+        private static byte[] digest(@StringVal("MD5") String algorithm, byte[] bytes) {
 		return getDigest(algorithm).digest(bytes);
 	}
 
-	private static byte[] digest(String algorithm, InputStream inputStream) throws IOException {
+        private static byte[] digest(@StringVal("MD5") String algorithm, InputStream inputStream) throws IOException {
 		MessageDigest messageDigest = getDigest(algorithm);
 		if (inputStream instanceof UpdateMessageDigestInputStream){
 			((UpdateMessageDigestInputStream) inputStream).updateMessageDigest(messageDigest);
@@ -136,34 +138,34 @@ public abstract class DigestUtils {
 		}
 	}
 
-	private static String digestAsHexString(String algorithm, byte[] bytes) {
+	private static String digestAsHexString(@StringVal("MD5") String algorithm, byte[] bytes) {
 		char[] hexDigest = digestAsHexChars(algorithm, bytes);
 		return new String(hexDigest);
 	}
 
-	private static String digestAsHexString(String algorithm, InputStream inputStream) throws IOException {
+	private static String digestAsHexString(@StringVal("MD5") String algorithm, InputStream inputStream) throws IOException {
 		char[] hexDigest = digestAsHexChars(algorithm, inputStream);
 		return new String(hexDigest);
 	}
 
-	private static StringBuilder appendDigestAsHex(String algorithm, byte[] bytes, StringBuilder builder) {
+	private static StringBuilder appendDigestAsHex(@StringVal("MD5") String algorithm, byte[] bytes, StringBuilder builder) {
 		char[] hexDigest = digestAsHexChars(algorithm, bytes);
 		return builder.append(hexDigest);
 	}
 
-	private static StringBuilder appendDigestAsHex(String algorithm, InputStream inputStream, StringBuilder builder)
+	private static StringBuilder appendDigestAsHex(@StringVal("MD5") String algorithm, InputStream inputStream, StringBuilder builder)
 			throws IOException {
 
 		char[] hexDigest = digestAsHexChars(algorithm, inputStream);
 		return builder.append(hexDigest);
 	}
 
-	private static char[] digestAsHexChars(String algorithm, byte[] bytes) {
+        private static char[] digestAsHexChars(@StringVal("MD5") String algorithm, byte[] bytes) {
 		byte[] digest = digest(algorithm, bytes);
 		return encodeHex(digest);
 	}
 
-	private static char[] digestAsHexChars(String algorithm, InputStream inputStream) throws IOException {
+        private static char[] digestAsHexChars(@StringVal("MD5") String algorithm, InputStream inputStream) throws IOException {
 		byte[] digest = digest(algorithm, inputStream);
 		return encodeHex(digest);
 	}

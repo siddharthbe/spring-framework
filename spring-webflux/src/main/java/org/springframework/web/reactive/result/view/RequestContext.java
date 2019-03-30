@@ -407,7 +407,7 @@ public class RequestContext {
 	 * @param modelName the name of the model object
 	 * @return the model object
 	 */
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "value", "compliance", "crypto"}) // FALSE POSITIVE: unchecked code with generics issues spurious typechecking error
 	@Nullable
 	protected <T> T getModelObject(String modelName) {
 		T modelObject = (T) this.model.get(modelName);

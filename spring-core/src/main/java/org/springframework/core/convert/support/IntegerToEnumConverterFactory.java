@@ -26,7 +26,7 @@ import org.springframework.core.convert.converter.ConverterFactory;
  * @author Stephane Nicoll
  * @since 4.3
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes", "value"}) // FALSE POSITIVE: rawtypes + asSuperVisitor
 final class IntegerToEnumConverterFactory implements ConverterFactory<Integer, Enum> {
 
 	@Override

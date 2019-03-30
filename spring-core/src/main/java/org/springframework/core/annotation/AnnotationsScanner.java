@@ -42,6 +42,7 @@ import org.springframework.util.ReflectionUtils;
  * @since 5.2
  * @see AnnotationsProcessor
  */
+@SuppressWarnings({"compliance", "value", "crypto"}) // FALSE POSITIVE: something with generics
 abstract class AnnotationsScanner {
 
 	private static final Annotation[] NO_ANNOTATIONS = {};
