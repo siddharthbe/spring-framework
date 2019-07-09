@@ -6,7 +6,6 @@ buildscript {
 	dependencies {
 		classpath("io.spring.gradle:propdeps-plugin:0.0.9.RELEASE")
 		classpath("org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.16")
-                classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.3-SNAPSHOT'    
 	}
 }
 
@@ -16,6 +15,7 @@ plugins {
 	id "org.jetbrains.kotlin.jvm" version "1.3.21" apply false
 	id "org.jetbrains.dokka" version "0.9.18"
 	id "org.asciidoctor.convert" version "1.5.8"
+	id 'org.checkerframework' version '0.3.4'
 }
 
 ext {
@@ -70,7 +70,7 @@ configure(allprojects) { project ->
 	apply from: "${gradleScriptDir}/ide.gradle"
 
 
-  apply plugin: 'com.jaredsburrows.checkerframework'
+  apply plugin: 'org.checkerframework'
 
 
   checkerFramework {
@@ -189,9 +189,9 @@ configure(allprojects) { project ->
 		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.7")
 
 
-                    checkerFramework 'com.amazonaws:kms-compliance-checker:1.0'
-    checkerFramework 'com.amazonaws:aws-crypto-compliance-checker:1.0'
-    implementation 'com.amazonaws:aws-crypto-compliance-checker:1.0'  
+	checkerFramework 'software.amazon.checkerframework:aws-kms-compliance-checker:1.0.2'
+	checkerFramework 'software.amazon.checkerframework:aws-crypto-compliance-checker:1.0'
+	implementation 'software.amazon.checkerframework:aws-crypto-compliance-checker:1.0'
     checkerFramework 'org.checkerframework:checker:0.0.0'
     checkerFramework 'org.checkerframework:checker-qual:2.+'
 
