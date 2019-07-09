@@ -14,6 +14,7 @@ plugins {
 	id "org.jetbrains.kotlin.jvm" version "1.3.21" apply false
 	id "org.jetbrains.dokka" version "0.9.18"
 	id "org.asciidoctor.convert" version "1.5.8"
+	id "org.checkerframework" version "0.3.4"
 }
 
 ext {
@@ -65,6 +66,7 @@ configure(allprojects) { project ->
 	apply plugin: "propdeps"
 	apply plugin: "test-source-set-dependencies"
 	apply plugin: "io.spring.dependency-management"
+	apply plugin: "org.checkerframework"
 	apply from: "${gradleScriptDir}/ide.gradle"
 
 	dependencyManagement {
@@ -171,6 +173,10 @@ configure(allprojects) { project ->
 		compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 		testCompileOnly("com.google.code.findbugs:jsr305:3.0.2")
 		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.7")
+		checkerFramework 'org.checkerframework:checker:2.+'
+		checkerFramework 'org.checkerframework:checker-qual:2.+'
+		checkerFramework 'org.checkerframework:HTTPSChecker:0.1-SNAPSHOT'
+		implementation 'org.checkerframework:HTTPSChecker:0.1-SNAPSHOT'
 	}
 
 	ext.javadocLinks = [
