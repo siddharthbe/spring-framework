@@ -72,17 +72,6 @@ configure(allprojects) { project ->
 
   apply plugin: 'org.checkerframework'
 
-
-  checkerFramework {
-    checkers = [
-             'com.amazon.checkerframework.compliance.kms.ComplianceChecker',
-             'com.amazon.checkerframework.cryptopolicy.CryptoPolicyComplianceChecker'
-    ]
-    extraJavacArgs = ['-Xmaxerrs', '1000', '-AsuppressWarnings=cast.unsafe', "-Astubs=$rootProject.projectDir/stubs", "-AskipDefs=StringToEnumConverterFactory|IntegerToEnumConverterFactory|DefaultServerResponseBuilder"]
-    excludeTests = true
-  }
-
-
 	dependencyManagement {
 		resolutionStrategy {
 			cacheChangingModulesFor 0, "seconds"
@@ -189,12 +178,13 @@ configure(allprojects) { project ->
 		checkstyle("io.spring.javaformat:spring-javaformat-checkstyle:0.0.7")
 
 
-	checkerFramework 'software.amazon.checkerframework:aws-kms-compliance-checker:1.0.2'
-	checkerFramework 'software.amazon.checkerframework:aws-crypto-compliance-checker:1.0'
-	implementation 'software.amazon.checkerframework:aws-crypto-compliance-checker:1.0'
-    checkerFramework 'org.checkerframework:checker:0.0.0'
+	//checkerFramework 'software.amazon.checkerframework:aws-kms-compliance-checker:1.0.2'
+	//checkerFramework 'software.amazon.checkerframework:aws-crypto-compliance-checker:1.0'
+	//implementation 'software.amazon.checkerframework:aws-crypto-compliance-checker:1.0'
+    checkerFramework 'org.checkerframework:checker:2.9.0'
     checkerFramework 'org.checkerframework:checker-qual:2.+'
-
+	checkerFramework 'org.checkerframework:StartsWithChecker:0.1-SNAPSHOT'
+	implementation 'org.checkerframework:StartsWithChecker:0.1-SNAPSHOT'
 	}
 
 	ext.javadocLinks = [
