@@ -1,0 +1,7 @@
+package java.lang;
+
+import org.checkerframework.checker.startswith.qual.*;
+
+class String{
+    public @PolyStartsWith String trim(@PolyStartsWith String this);
+}

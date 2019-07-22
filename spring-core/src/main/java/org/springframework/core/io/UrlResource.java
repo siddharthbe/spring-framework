@@ -31,6 +31,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * {@link Resource} implementation for {@code java.net.URL} locators.
  * Supports resolution as a {@code URL} and also as a {@code File} in
@@ -90,7 +92,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 * @throws MalformedURLException if the given URL path is not valid
 	 * @see java.net.URL#URL(String)
 	 */
-	public UrlResource(String path) throws MalformedURLException {
+	public UrlResource(@StartsWith({"https", "file", "path"}) String path) throws MalformedURLException {
 		Assert.notNull(path, "Path must not be null");
 		this.uri = null;
 		this.url = new URL(path);
@@ -144,8 +146,8 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 * @return the cleaned URL (possibly the original URL as-is)
 	 * @see org.springframework.util.StringUtils#cleanPath
 	 */
-	private URL getCleanedUrl(URL originalUrl, String originalPath) {
-		String cleanedPath = StringUtils.cleanPath(originalPath);
+	private URL getCleanedUrl(URL originalUrl, @StartsWith({"https", "file", "path"}) String originalPath) {
+		@StartsWith({"https", "file", "path"}) String cleanedPath = StringUtils.cleanPath(originalPath);
 		if (!cleanedPath.equals(originalPath)) {
 			try {
 				return new URL(cleanedPath);

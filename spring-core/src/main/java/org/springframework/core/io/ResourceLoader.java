@@ -19,6 +19,8 @@ package org.springframework.core.io;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Strategy interface for loading resources (e.. class path or file system
  * resources). An {@link org.springframework.context.ApplicationContext}
@@ -64,7 +66,7 @@ public interface ResourceLoader {
 	 * @see Resource#exists()
 	 * @see Resource#getInputStream()
 	 */
-	Resource getResource(String location);
+	Resource getResource(@StartsWith({"https", "file", "path"}) String location);
 
 	/**
 	 * Expose the ClassLoader used by this ResourceLoader.

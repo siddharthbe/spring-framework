@@ -30,6 +30,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * Default implementation of the {@link ResourceLoader} interface.
  * Used by {@link ResourceEditor}, and serves as base class for
@@ -141,9 +142,8 @@ public class DefaultResourceLoader implements ResourceLoader {
 
 
 	@Override
-	public Resource getResource(String location) {
+	public Resource getResource(@StartsWith({"https", "file", "path"}) String location) {
 		Assert.notNull(location, "Location must not be null");
-
 		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
 			Resource resource = protocolResolver.resolve(location, this);
 			if (resource != null) {

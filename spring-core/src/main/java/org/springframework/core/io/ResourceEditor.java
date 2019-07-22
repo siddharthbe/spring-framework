@@ -25,6 +25,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * {@link java.beans.PropertyEditor Editor} for {@link Resource}
  * descriptors, to automatically convert {@code String} locations
@@ -94,9 +96,9 @@ public class ResourceEditor extends PropertyEditorSupport {
 
 
 	@Override
-	public void setAsText(String text) {
+	public void setAsText(@StartsWith({"https", "file", "path"}) String text) {
 		if (StringUtils.hasText(text)) {
-			String locationToUse = resolvePath(text).trim();
+			@StartsWith({"https", "file", "path"}) String locationToUse = resolvePath(text).trim();
 			setValue(this.resourceLoader.getResource(locationToUse));
 		}
 		else {
@@ -112,7 +114,7 @@ public class ResourceEditor extends PropertyEditorSupport {
 	 * @see PropertyResolver#resolvePlaceholders
 	 * @see PropertyResolver#resolveRequiredPlaceholders
 	 */
-	protected String resolvePath(String path) {
+	protected @StartsWith({"https", "file", "path"}) String resolvePath(@StartsWith({"https", "file", "path"}) String path) {
 		if (this.propertyResolver == null) {
 			this.propertyResolver = new StandardEnvironment();
 		}
