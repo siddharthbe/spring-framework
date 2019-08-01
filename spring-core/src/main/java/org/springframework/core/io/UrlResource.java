@@ -92,7 +92,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 * @throws MalformedURLException if the given URL path is not valid
 	 * @see java.net.URL#URL(String)
 	 */
-	public UrlResource(@StartsWith({"https", "file", "path"}) String path) throws MalformedURLException {
+	public UrlResource(@StartsWith({"https", "file", "jar", "war"}) String path) throws MalformedURLException {
 		Assert.notNull(path, "Path must not be null");
 		this.uri = null;
 		this.url = new URL(path);
@@ -109,7 +109,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 * @throws MalformedURLException if the given URL specification is not valid
 	 * @see java.net.URI#URI(String, String, String)
 	 */
-	public UrlResource(String protocol, String location) throws MalformedURLException  {
+	public UrlResource(@StartsWith({"https", "file", "jar", "war"}) String protocol, String location) throws MalformedURLException  {
 		this(protocol, location, null);
 	}
 
@@ -146,8 +146,8 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 * @return the cleaned URL (possibly the original URL as-is)
 	 * @see org.springframework.util.StringUtils#cleanPath
 	 */
-	private URL getCleanedUrl(URL originalUrl, @StartsWith({"https", "file", "path"}) String originalPath) {
-		@StartsWith({"https", "file", "path"}) String cleanedPath = StringUtils.cleanPath(originalPath);
+	private URL getCleanedUrl(URL originalUrl, @StartsWith({"https", "file", "jar", "war"}) String originalPath) {
+		@StartsWith({"https", "file", "jar", "war"}) String cleanedPath = StringUtils.cleanPath(originalPath);
 		if (!cleanedPath.equals(originalPath)) {
 			try {
 				return new URL(cleanedPath);

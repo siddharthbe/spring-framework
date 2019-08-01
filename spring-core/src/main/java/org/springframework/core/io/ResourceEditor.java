@@ -96,9 +96,9 @@ public class ResourceEditor extends PropertyEditorSupport {
 
 
 	@Override
-	public void setAsText(@StartsWith({"https", "file", "path"}) String text) {
+	public void setAsText(String text) {
 		if (StringUtils.hasText(text)) {
-			@StartsWith({"https", "file", "path"}) String locationToUse = resolvePath(text).trim();
+			String locationToUse = resolvePath(text).trim();
 			setValue(this.resourceLoader.getResource(locationToUse));
 		}
 		else {
@@ -114,7 +114,7 @@ public class ResourceEditor extends PropertyEditorSupport {
 	 * @see PropertyResolver#resolvePlaceholders
 	 * @see PropertyResolver#resolveRequiredPlaceholders
 	 */
-	protected @StartsWith({"https", "file", "path"}) String resolvePath(@StartsWith({"https", "file", "path"}) String path) {
+	protected String resolvePath(String path) {
 		if (this.propertyResolver == null) {
 			this.propertyResolver = new StandardEnvironment();
 		}

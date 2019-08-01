@@ -3,6 +3,8 @@ package java.net;
 import org.checkerframework.checker.startswith.qual.*;
 
 class URI{
-    public URI(@StartsWith({"https", "file", "path"}) String spec);
-    public @StartsWith({"https", "file", "path"}) String toString(URL this);
+    public URI(@StartsWith({"https", "file", "jar", "war"}) String spec);
+    public URI(@StartsWith({"https", "file", "jar", "war"}) String scheme, String ssp, String fragment);
+    public @StartsWith({"https", "file", "jar", "war"}) String toString(URI this);
+    public @StartsWith({"https", "file", "jar", "war"}) String getScheme(URI this);
 }

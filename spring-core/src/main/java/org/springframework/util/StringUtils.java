@@ -36,6 +36,7 @@ import java.util.TimeZone;
 
 import org.springframework.lang.Nullable;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * Miscellaneous {@link String} utility methods.
  *
@@ -389,7 +390,8 @@ public abstract class StringUtils {
 	 * @param newPattern {@code String} to insert
 	 * @return a {@code String} with the replacements
 	 */
-	public static String replace(String inString, String oldPattern, @Nullable String newPattern) {
+	@SuppressWarnings("startswith")//Not sure what to put here
+	public static @PolyStartsWith String replace(@PolyStartsWith String inString, String oldPattern, @Nullable String newPattern) {
 		if (!hasLength(inString) || !hasLength(oldPattern) || newPattern == null) {
 			return inString;
 		}
@@ -633,7 +635,8 @@ public abstract class StringUtils {
 	 * @param path the original path
 	 * @return the normalized path
 	 */
-	public static String cleanPath(String path) {
+	@SuppressWarnings("startswith")//Not sure what to put here
+	public static @PolyStartsWith String cleanPath(@PolyStartsWith String path) {
 		if (!hasLength(path)) {
 			return path;
 		}

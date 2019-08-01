@@ -27,6 +27,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Editor for {@code java.net.URI}, to directly populate a URI property
  * instead of using a String property as bridge.
@@ -101,6 +103,8 @@ public class URIEditor extends PropertyEditorSupport {
 
 
 	@Override
+	@SuppressWarnings("startswith")
+	//TRUE POSITIVE: We don't know if URI has accepted protocols or not.
 	public void setAsText(String text) throws IllegalArgumentException {
 		if (StringUtils.hasText(text)) {
 			String uri = text.trim();
@@ -135,11 +139,13 @@ public class URIEditor extends PropertyEditorSupport {
 	 * @return the URI instance
 	 * @throws java.net.URISyntaxException if URI conversion failed
 	 */
-	protected URI createURI(String value) throws URISyntaxException {
+	protected URI createURI(@StartsWith({"https", "file", "jar", "war"}) String value) throws URISyntaxException {
 		int colonIndex = value.indexOf(':');
 		if (this.encode && colonIndex != -1) {
 			int fragmentIndex = value.indexOf('#', colonIndex + 1);
-			String scheme = value.substring(0, colonIndex);
+			@SuppressWarnings("startswith") @StartsWith({"https", "file", "jar", "war"}) String scheme =
+																						 value.substring(0, colonIndex);
+			//FALSE POSITIVE: As it takes the substring from 0 index.
 			String ssp = value.substring(colonIndex + 1, (fragmentIndex > 0 ? fragmentIndex : value.length()));
 			String fragment = (fragmentIndex > 0 ? value.substring(fragmentIndex + 1) : null);
 			return new URI(scheme, ssp, fragment);

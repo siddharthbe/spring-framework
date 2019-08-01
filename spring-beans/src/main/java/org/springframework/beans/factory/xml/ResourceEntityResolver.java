@@ -30,6 +30,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.lang.Nullable;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * {@code EntityResolver} implementation that tries to resolve entity references
  * through a {@link org.springframework.core.io.ResourceLoader} (usually,
@@ -80,8 +81,10 @@ public class ResourceEntityResolver extends DelegatingEntityResolver {
 		if (source == null && systemId != null) {
 			String resourcePath = null;
 			try {
-				String decodedSystemId = URLDecoder.decode(systemId, "UTF-8");
-				String givenUrl = new URL(decodedSystemId).toString();
+				@SuppressWarnings("startswith") @StartsWith({"https", "file", "jar", "war"}) String decodedSystemId =
+															 URLDecoder.decode(systemId, "UTF-8");
+				//TRUE POSITIVE: Checks if systemId is null but doesn't make sure if systemId has the accepted protocols
+				@StartsWith({"https", "file", "jar", "war"}) String givenUrl = new URL(decodedSystemId).toString();
 				String systemRootUrl = new File("").toURI().toURL().toString();
 				// Try relative to resource base if currently in system root.
 				if (givenUrl.startsWith(systemRootUrl)) {
@@ -110,7 +113,8 @@ public class ResourceEntityResolver extends DelegatingEntityResolver {
 			}
 			else if (systemId.endsWith(DTD_SUFFIX) || systemId.endsWith(XSD_SUFFIX)) {
 				// External dtd/xsd lookup via https even for canonical http declaration
-				String url = systemId;
+				@SuppressWarnings("startswith") @StartsWith({"https", "file", "jar", "war"}) String url = systemId;
+				//FALSE POSITIVE: As it is checked if the string is "http" and and if it is it changes it to "https"
 				if (url.startsWith("http:")) {
 					url = "https:" + url.substring(5);
 				}

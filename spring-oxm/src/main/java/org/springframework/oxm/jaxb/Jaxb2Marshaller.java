@@ -100,6 +100,8 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.util.xml.StaxUtils;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Implementation of the {@code GenericMarshaller} interface for JAXB 2.2.
  *
@@ -951,14 +953,20 @@ public class Jaxb2Marshaller implements MimeMarshaller, MimeUnmarshaller, Generi
 		}
 
 		@Override
+		@SuppressWarnings("startswith")
+		//Cannot override because of different annotations in super method's and this method's arguments.
 		public String addMtomAttachment(byte[] data, int offset, int length, String mimeType,
-				String elementNamespace, String elementLocalName) {
+										@StartsWith({"https", "file", "jar", "war"}) String elementNamespace,
+										String elementLocalName) {
 			ByteArrayDataSource dataSource = new ByteArrayDataSource(mimeType, data, offset, length);
 			return addMtomAttachment(new DataHandler(dataSource), elementNamespace, elementLocalName);
 		}
 
 		@Override
-		public String addMtomAttachment(DataHandler dataHandler, String elementNamespace, String elementLocalName) {
+		@SuppressWarnings("startswith")
+		//Cannot override because of different annotations in super method's and this method's arguments.
+		public String addMtomAttachment(DataHandler dataHandler, @StartsWith({"https", "file", "jar", "war"})
+										String elementNamespace, String elementLocalName) {
 			String host = getHost(elementNamespace, dataHandler);
 			String contentId = UUID.randomUUID() + "@" + host;
 			this.mimeContainer.addAttachment("<" + contentId + ">", dataHandler);
@@ -971,7 +979,8 @@ public class Jaxb2Marshaller implements MimeMarshaller, MimeUnmarshaller, Generi
 			return CID + contentId;
 		}
 
-		private String getHost(String elementNamespace, DataHandler dataHandler) {
+		private String getHost(@StartsWith({"https", "file", "jar", "war"}) String elementNamespace,
+							   DataHandler dataHandler) {
 			try {
 				URI uri = new URI(elementNamespace);
 				return uri.getHost();

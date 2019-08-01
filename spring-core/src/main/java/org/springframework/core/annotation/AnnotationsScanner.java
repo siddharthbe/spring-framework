@@ -34,6 +34,8 @@ import org.springframework.util.ConcurrentReferenceHashMap;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Scanner to search for relevant annotations on the hierarchy of an
  * {@link AnnotatedElement}.
@@ -184,6 +186,7 @@ abstract class AnnotationsScanner {
 	}
 
 	@Nullable
+	@SuppressWarnings("startswith") //some error in CF
 	private static <C, R> R processClassHierarchy(C context, int[] aggregateIndex,
 			Class<?> source, AnnotationsProcessor<C, R> processor,
 			@Nullable BiPredicate<C, Class<?>> classFilter, boolean includeInterfaces) {
@@ -250,6 +253,7 @@ abstract class AnnotationsScanner {
 	}
 
 	@Nullable
+	@SuppressWarnings("startswith")//Some error in CF
 	private static <C, R> R processMethodHierarchy(C context, int[] aggregateIndex,
 			Class<?> sourceClass, AnnotationsProcessor<C, R> processor,
 			@Nullable BiPredicate<C, Class<?>> classFilter, Method rootMethod,

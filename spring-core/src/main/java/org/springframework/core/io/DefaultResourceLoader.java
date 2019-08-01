@@ -142,7 +142,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 
 
 	@Override
-	public Resource getResource(@StartsWith({"https", "file", "path"}) String location) {
+	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
 		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
 			Resource resource = protocolResolver.resolve(location, this);
@@ -160,7 +160,8 @@ public class DefaultResourceLoader implements ResourceLoader {
 		else {
 			try {
 				// Try to parse the location as a URL...
-				URL url = new URL(location);
+				@SuppressWarnings("startswith") @StartsWith({"https", "file"}) String urlLocation = location;
+				URL url = new URL(urlLocation);
 				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));
 			}
 			catch (MalformedURLException ex) {

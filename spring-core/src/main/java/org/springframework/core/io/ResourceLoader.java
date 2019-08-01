@@ -66,7 +66,7 @@ public interface ResourceLoader {
 	 * @see Resource#exists()
 	 * @see Resource#getInputStream()
 	 */
-	Resource getResource(@StartsWith({"https", "file", "path"}) String location);
+	Resource getResource(String location);
 
 	/**
 	 * Expose the ClassLoader used by this ResourceLoader.

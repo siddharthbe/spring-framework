@@ -72,7 +72,7 @@ public class FileUrlResource extends UrlResource implements WritableResource {
 	 */
 	public FileUrlResource(String location) throws MalformedURLException {
 		super(ResourceUtils.URL_PROTOCOL_FILE, location);
-	}
+}
 
 
 	@Override

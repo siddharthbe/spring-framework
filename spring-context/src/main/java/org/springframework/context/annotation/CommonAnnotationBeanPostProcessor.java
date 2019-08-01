@@ -74,6 +74,8 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.util.StringValueResolver;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * {@link org.springframework.beans.factory.config.BeanPostProcessor} implementation
  * that supports common Java annotations out of the box, in particular the JSR-250
@@ -665,7 +667,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 		private final Class<?> elementType;
 
-		private final String wsdlLocation;
+		private final @StartsWith({"https", "file", "jar", "war"}) String wsdlLocation;
 
 		public WebServiceRefElement(Member member, AnnotatedElement ae, @Nullable PropertyDescriptor pd) {
 			super(member, pd);

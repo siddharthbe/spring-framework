@@ -3,6 +3,11 @@ import org.checkerframework.checker.startswith.qual.*;
 package java.net;
 
 class URL{
-    public URL(@StartsWith({"https", "file", "path"}) String spec);
-    public @StartsWith({"https", "file", "path"}) String toString(URL this);
+    public URL(@StartsWith({"https", "file", "jar", "war"}) String spec);
+    public @StartsWith({"https", "file", "jar", "war"}) String toString(URL this);
+}
+
+class URLDecoder{
+    public static @PolyStartsWith String decode(@PolyStartsWith String s, String enc) throws
+                                                                                      UnsupportedEncodingException;
 }

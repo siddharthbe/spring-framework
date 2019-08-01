@@ -1,0 +1,7 @@
+package javax.xml.ws;
+
+import org.checkerframework.checker.startswith.qual.*;
+
+class WebServiceRef{
+    public @StartsWith({"https", "file", "jar", "war"}) String wsdlLocation(WebServiceRef this);
+}

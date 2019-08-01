@@ -26,6 +26,8 @@ import java.net.URLConnection;
 
 import org.springframework.lang.Nullable;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Utility methods for resolving resource locations to files in the
  * file system. Mainly for internal use within the framework.
@@ -51,19 +53,19 @@ public abstract class ResourceUtils {
 	public static final String CLASSPATH_URL_PREFIX = "classpath:";
 
 	/** URL prefix for loading from the file system: "file:". */
-	public static final String FILE_URL_PREFIX = "file:";
+	public static final @StartsWith({"file"}) String FILE_URL_PREFIX = "file:";
 
 	/** URL prefix for loading from a jar file: "jar:". */
-	public static final String JAR_URL_PREFIX = "jar:";
+	public static final @StartsWith({"jar"}) String JAR_URL_PREFIX = "jar:";
 
 	/** URL prefix for loading from a war file on Tomcat: "war:". */
 	public static final String WAR_URL_PREFIX = "war:";
 
 	/** URL protocol for a file in the file system: "file". */
-	public static final String URL_PROTOCOL_FILE = "file";
+	public static final @StartsWith({"file"}) String URL_PROTOCOL_FILE = "file";
 
 	/** URL protocol for an entry from a jar file: "jar". */
-	public static final String URL_PROTOCOL_JAR = "jar";
+	public static final @StartsWith({"jar"}) String URL_PROTOCOL_JAR = "jar";
 
 	/** URL protocol for an entry from a war file: "war". */
 	public static final String URL_PROTOCOL_WAR = "war";
@@ -109,7 +111,11 @@ public abstract class ResourceUtils {
 			return true;
 		}
 		try {
-			new URL(resourceLocation);
+			@SuppressWarnings("startswith") @StartsWith({"https", "file", "jar"})
+											String urlResourceLocation = resourceLocation;
+			//TRUE POSITIVE: resourceLocation could be not a URL and hence it doesn't need to start with the accepted
+			//protocols.
+			new URL(urlResourceLocation);
 			return true;
 		}
 		catch (MalformedURLException ex) {
@@ -141,7 +147,11 @@ public abstract class ResourceUtils {
 		}
 		try {
 			// try URL
-			return new URL(resourceLocation);
+			@SuppressWarnings("startswith") @StartsWith({"https", "file", "jar"})
+											String urlResourceLocation = resourceLocation;
+			//TRUE POSITIVE: resourceLocation could be not a URL and hence it doesn't need to start with the accepted
+			//protocols.
+			return new URL(urlResourceLocation);
 		}
 		catch (MalformedURLException ex) {
 			// no URL -> treat as file path
@@ -181,7 +191,11 @@ public abstract class ResourceUtils {
 		}
 		try {
 			// try URL
-			return getFile(new URL(resourceLocation));
+			@SuppressWarnings("startswith") @StartsWith({"https", "file", "jar"})
+			String urlResourceLocation = resourceLocation;
+			//TRUE POSITIVE: resourceLocation could be not a URL and hence it doesn't need to start with the accepted
+			//protocols.
+			return getFile(new URL(urlResourceLocation));
 		}
 		catch (MalformedURLException ex) {
 			// no URL -> treat as file path
@@ -309,17 +323,19 @@ public abstract class ResourceUtils {
 		String urlFile = jarUrl.getFile();
 		int separatorIndex = urlFile.indexOf(JAR_URL_SEPARATOR);
 		if (separatorIndex != -1) {
-			String jarFile = urlFile.substring(0, separatorIndex);
+			@SuppressWarnings("startswith") @StartsWith({"jar"}) String jarFile = urlFile.substring(0, separatorIndex);
+			//FALSE POSITIVE: We know it will only start with jar as there is a jar url seperator in the given url
 			try {
 				return new URL(jarFile);
 			}
 			catch (MalformedURLException ex) {
+				String jarFile2 = "";
 				// Probably no protocol in original jar URL, like "jar:C:/mypath/myjar.jar".
 				// This usually indicates that the jar file resides in the file system.
 				if (!jarFile.startsWith("/")) {
-					jarFile = "/" + jarFile;
+					jarFile2 = "/" + jarFile;
 				}
-				return new URL(FILE_URL_PREFIX + jarFile);
+				return new URL(FILE_URL_PREFIX + jarFile2);
 			}
 		}
 		else {
@@ -344,13 +360,16 @@ public abstract class ResourceUtils {
 		int endIndex = urlFile.indexOf(WAR_URL_SEPARATOR);
 		if (endIndex != -1) {
 			// Tomcat's "war:file:...mywar.war*/WEB-INF/lib/myjar.jar!/myentry.txt"
-			String warFile = urlFile.substring(0, endIndex);
+			@SuppressWarnings("startswith") @StartsWith({"war"}) String warFile = urlFile.substring(0, endIndex);
+			//FALSE POSITIVE: We know it will only start with war as there is a war url seperator in the given url
 			if (URL_PROTOCOL_WAR.equals(jarUrl.getProtocol())) {
 				return new URL(warFile);
 			}
 			int startIndex = warFile.indexOf(WAR_URL_PREFIX);
 			if (startIndex != -1) {
-				return new URL(warFile.substring(startIndex + WAR_URL_PREFIX.length()));
+				@SuppressWarnings("startswith") @StartsWith("war") String warFile2 = warFile.substring(startIndex +
+																					 WAR_URL_PREFIX.length());
+				return new URL(warFile2);
 			}
 		}
 
@@ -377,7 +396,7 @@ public abstract class ResourceUtils {
 	 * @return the URI instance
 	 * @throws URISyntaxException if the location wasn't a valid URI
 	 */
-	public static URI toURI(String location) throws URISyntaxException {
+	public static URI toURI(@StartsWith({"https", "file", "jar", "war"}) String location) throws URISyntaxException {
 		return new URI(StringUtils.replace(location, " ", "%20"));
 	}
 

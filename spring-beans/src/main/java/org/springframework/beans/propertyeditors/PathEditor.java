@@ -29,6 +29,8 @@ import org.springframework.core.io.ResourceEditor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Editor for {@code java.nio.file.Path}, to directly populate a Path
  * property instead of using a String property as bridge.
@@ -77,7 +79,8 @@ public class PathEditor extends PropertyEditorSupport {
 		boolean nioPathCandidate = !text.startsWith(ResourceLoader.CLASSPATH_URL_PREFIX);
 		if (nioPathCandidate && !text.startsWith("/")) {
 			try {
-				URI uri = new URI(text);
+				@SuppressWarnings("startswith") URI uri = new URI(text);
+				//TRUE POSITIVE: It is never checked if text is a valid URI string.
 				if (uri.getScheme() != null) {
 					nioPathCandidate = false;
 					// Let's try NIO file system providers via Paths.get(URI)
